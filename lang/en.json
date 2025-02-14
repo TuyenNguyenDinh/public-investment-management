@@ -550,5 +550,6 @@
     "logged_out": "Logged out",
     "save": "Save",
     "save_and_exit": "Save and exit",
-    "save_and_duplicate": "Save and duplicate"
+    "save_and_duplicate": "Save and duplicate",
+    "error_call_api": "An error occurred while fetching data."
 }

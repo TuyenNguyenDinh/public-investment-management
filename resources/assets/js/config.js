@@ -138,9 +138,20 @@ export const fetchCategories = async () => {
         return null;
     }
 }
-
 setTimeout(() => {
     $('.dataTables_filter .form-control').removeClass('form-control-sm');
     $('.dataTables_length .form-select').removeClass('form-select-sm');
 }, 300);
+
+export const fetchApi = async (callback) => {
+    try {
+        $("#overlay").fadeIn(300);
+        await callback();
+    } catch (error) {
+        toastr.error(translations.error_call_api);
+        console.log('Error: ', error);
+    } finally {
+        $("#overlay").fadeOut(300);
+    }
+}
 

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-import {CSRF_TOKEN, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
+import {CSRF_TOKEN, fetchApi, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
 
 const nodeTree = $('#jstree-menu');
 const nodeTreeUpdate = $('#jstree-menu-update');
@@ -230,9 +230,9 @@ const setupEventHandlers = () => {
 };
 
 // Handle Edit User Click
-const handleEditUser = function () {
+const handleEditUser = async function () {
     const id = $(this).data('id');
-    loadUserData(id);
+    await fetchApi(async () => await loadUserData(id)).then(r => console.log('User data loaded'));
 };
 
 // Handle Delete User Click
@@ -249,16 +249,16 @@ const handleTriggerUser = function () {
 };
 
 // Load User Data for Editing
-const loadUserData = (id) => {
+const loadUserData = async (id) => {
     const selectEditUser = $('#editUserForm select#updateRole');
     const selectUpdateOrganizations = $('#editUserForm select#updateOrganizations');
     const selectUpdateMenus = $('#editUserForm select#reAssignMenu');
     const form = $('#editUserForm');
 
-    fetch(`${baseUrl}api/v1/users/${id}`)
+    await fetch(`${baseUrl}api/v1/users/${id}`)
         .then(handleFetchError)
-        .then((data) => {
-            populateEditUserForm(data.data, selectEditUser, selectUpdateOrganizations, selectUpdateMenus, form, id)
+        .then(async (data) => {
+            await populateEditUserForm(data.data, selectEditUser, selectUpdateOrganizations, selectUpdateMenus, form, id)
                 .then(() => console.log('Loaded user data'));
         })
         .catch((error) => {

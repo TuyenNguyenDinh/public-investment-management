@@ -549,5 +549,6 @@
     "logged_out": "Đã đăng xuất",
     "save": "Lưu",
     "save_and_exit": "Lưu và thoát",
-    "save_and_duplicate": "Lưu và nhân bản"
+    "save_and_duplicate": "Lưu và nhân bản",
+    "error_call_api": "Có lỗi trong quá trình tài về dữ liệu"
 }
