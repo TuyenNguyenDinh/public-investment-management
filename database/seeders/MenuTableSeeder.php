@@ -1,0 +1,246 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Enums\Menus\MenuAllowDeleteEnum;
+use App\Enums\Menus\MenuGroupFlagEnum;
+use App\Enums\Menus\MenuStatusEnum;
+use App\Models\Menu;
+use Illuminate\Database\Seeder;
+
+class MenuTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        Menu::query()->truncate();
+        Menu::query()->insert([
+            [
+                "id" => 1,
+                "name" => "Dashboards",
+                "icon" => "menu-icon tf-icons ti ti-smart-home",
+                "slug" => "dashboard-analytics",
+                "route_name" => null,
+                "url" => "/",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::DENY,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 3,
+                "_rgt" => 4,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 2,
+                "name" => "Menus",
+                "icon" => "menu-icon tf-icons ti ti-smart-home",
+                "slug" => "app-menus-index",
+                "route_name" => "http://quanly.local/app/menus",
+                "url" => "/app/menus",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::DENY,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 17,
+                "_rgt" => 18,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 3,
+                "name" => "Roles & Permissions",
+                "icon" => "menu-icon tf-icons ti ti-settings",
+                "slug" => "app-roles",
+                "route_name" => null,
+                "url" => "/app/roles",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 7,
+                "_rgt" => 12,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 4,
+                "name" => "Roles",
+                "icon" => "menu-icon tf-icons ti ti-sparkles",
+                "slug" => "app-roles-index",
+                "route_name" => null,
+                "url" => "/app/roles",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 10,
+                "_rgt" => 11,
+                "parent_id" => 3,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 5,
+                "name" => "Permissions",
+                "icon" => "menu-icon tf-icons ti ti-license",
+                "slug" => "app-roles-permissions-index",
+                "route_name" => null,
+                "url" => "/app/roles/permissions",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 8,
+                "_rgt" => 9,
+                "parent_id" => 3,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 6,
+                "name" => "Organizations",
+                "icon" => "menu-icon tf-icons ti ti-license",
+                "slug" => "app-organizations-index",
+                "route_name" => null,
+                "url" => "/app/organizations",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 15,
+                "_rgt" => 16,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 7,
+                "name" => "Users",
+                "icon" => "menu-icon tf-icons ti ti-users",
+                "slug" => "app-users-index",
+                "route_name" => null,
+                "url" => "/app/users",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 13,
+                "_rgt" => 14,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 8,
+                "name" => "Group 1",
+                "icon" => "ti ti-folder",
+                "slug" => null,
+                "route_name" => null,
+                "url" => null,
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::ACTIVE,
+                "_lft" => 1,
+                "_rgt" => 2,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 9,
+                "name" => "Group 2",
+                "icon" => "ti ti-folder",
+                "slug" => null,
+                "route_name" => null,
+                "url" => null,
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::ACTIVE,
+                "_lft" => 5,
+                "_rgt" => 6,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 10,
+                "name" => "Group 3",
+                "icon" => "ti ti-folder",
+                "slug" => null,
+                "route_name" => null,
+                "url" => null,
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::ACTIVE,
+                "_lft" => 19,
+                "_rgt" => 20,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 12,
+                "name" => "Posts",
+                "icon" => "menu-icon tf-icons ti ti-news",
+                "slug" => "app-posts-index",
+                "route_name" => null,
+                "url" => "/app/posts",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 21,
+                "_rgt" => 22,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now()
+            ],
+            [
+                "id" => 13,
+                "name" => "Configs",
+                "icon" => "menu-icon tf-icons ti ti-settings-automation",
+                "slug" => "app-configs-index",
+                "route_name" => null,
+                "url" => "/app/configs",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 23,
+                "_rgt" => 24,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now(),
+            ],
+            [
+                "id" => 14,
+                "name" => "Categories",
+                "icon" => "menu-icon tf-icons ti ti-news",
+                "slug" => "app-categories-index",
+                "route_name" => null,
+                "url" => "/app/categories",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 25,
+                "_rgt" => 26,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now(),
+            ],
+            [
+                "id" => 15,
+                "name" => "Logs",
+                "icon" => "menu-icon tf-icons ti ti-brand-blogger",
+                "slug" => "app-logs-index",
+                "route_name" => null,
+                "url" => "/app/logs",
+                "status" => MenuStatusEnum::ACTIVE,
+                "allow_delete" => MenuAllowDeleteEnum::ALLOW,
+                "group_menu_flag" => MenuGroupFlagEnum::INACTIVE,
+                "_lft" => 27,
+                "_rgt" => 28,
+                "parent_id" => null,
+                "created_at" => now(),
+                "updated_at" => now(),
+            ]
+        ]);
+    }
+}
