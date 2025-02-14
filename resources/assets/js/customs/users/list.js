@@ -232,7 +232,7 @@ const setupEventHandlers = () => {
 // Handle Edit User Click
 const handleEditUser = async function () {
     const id = $(this).data('id');
-    await fetchApi(async () => await loadUserData(id)).then(r => console.log('User data loaded'));
+    await fetchApi(async () => await loadUserData(id));
 };
 
 // Handle Delete User Click
