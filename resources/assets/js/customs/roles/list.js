@@ -1,6 +1,7 @@
 'use strict';
 
-import {CSRF_TOKEN, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
+import {CSRF_TOKEN, fetchApi, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
+import $ from "jquery";
 
 // Datatable và các plugin
 $(function () {
@@ -146,11 +147,11 @@ function getResponsivePopupSettings() {
     };
 }
 
-function getRoleDetail(formSelector, apiUrl, modalSelector) {
+const getRoleDetail = async (formSelector, apiUrl, modalSelector) => {
     $(document).on('click', '.edit-role', function () {
         let id = $(this).data('id');
         const form = $(formSelector);
-        fetchRoleData(apiUrl, id, form, modalSelector);
+        fetchApi(async () => await fetchRoleData(apiUrl, id, form, modalSelector));
     });
 }
 
@@ -161,8 +162,8 @@ function handleAjaxError(jqXHR, textStatus, errorThrown) {
 }
 
 // Fetch dữ liệu vai trò
-function fetchRoleData(apiUrl, id, form, modalSelector) {
-    fetch(`${baseUrl}${apiUrl}${id}`, {
+const fetchRoleData = async (apiUrl, id, form, modalSelector) => {
+    await fetch(`${baseUrl}${apiUrl}${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -170,8 +171,8 @@ function fetchRoleData(apiUrl, id, form, modalSelector) {
         }
     })
         .then(handleFetchError)
-        .then(response => {
-            populateRoleForm(response, form);
+        .then(async (response) => {
+            await populateRoleForm(response, form);
             $(modalSelector).modal('show');
         })
         .catch(error => {
@@ -181,7 +182,7 @@ function fetchRoleData(apiUrl, id, form, modalSelector) {
 }
 
 // Điền dữ liệu vào form chỉnh sửa vai trò
-function populateRoleForm(response, form) {
+const populateRoleForm = async (response, form) => {
     let selectEditOrganization = form.find('select#updateOrganizations');
     form.find('input[type="checkbox"], input[type="radio"], select').prop('checked', false);
     form.attr('method', 'POST');

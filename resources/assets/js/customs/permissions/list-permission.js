@@ -79,7 +79,9 @@ $(function () {
                          </button>`
                             : ``;
                         let editPermission = window.permissions.Update
-                            ? `<span class="text-nowrap"><button class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill me-1" data-bs-target="#editPermissionModal" data-bs-toggle="modal" data-bs-dismiss="modal" data-id="${full['id']}" data-name><i class="ti ti-edit ti-md"></i></button>`
+                            ? `<span class="text-nowrap"><div class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill me-1 btn-edit-permission"
+                                data-id="${full['id']}"
+                                data-name="${full['name']}"><i class="ti ti-edit ti-md"></i></div>`
                             : ``;
                         let deletePermission = window.permissions.Delete
                             ? `<button class="btn btn-sm btn-icon delete-record btn-text-secondary rounded-pill waves-effect" data-id="${full['id']}"><i class="ti ti-trash"></i></button>`
@@ -156,8 +158,9 @@ $(function () {
         $('.add-new').remove();
     }
 
+    let body = $('.datatables-permissions tbody');
     // Delete Record
-    $('.datatables-permissions tbody').on('click', '.delete-record', function () {
+    body.on('click', '.delete-record', function () {
         let id = $(this).data('id'),
             dtrModal = $('.dtr-bs-modal.show');
 
@@ -196,16 +199,17 @@ $(function () {
         $('.dataTables_paginate').addClass('me-n1');
     }, 300);
 
-    $('#editPermissionModal').on('shown.bs.modal', function (event) {
-        let button = $(event.relatedTarget);
+    body.on('click', '.btn-edit-permission', function () {
+        let id = $(this).data('id');
+        let name = $(this).data('name');
+        let modal = $('#editPermissionModal');
         const form = $('#editPermissionForm');
-        let id = button.data('id');
-        let name = button.parents('tr').find(`span.name_${id}`).text().replace(/-/g, '');
         form.attr('action', `permissions/${id}`)
         form.attr('data-id', id)
         form.attr('method', 'POST')
         $('input#editPermissionName.form-control').val(name)
-    });
+        modal.modal('show');
+    })
 
     $('#addChildPermissionModal').on('shown.bs.modal', function (event) {
         let button = $(event.relatedTarget);

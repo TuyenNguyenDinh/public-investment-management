@@ -9,6 +9,7 @@ $(function () {
 
     const apiRequest = async (url, method = 'GET', body = null) => {
         try {
+            $("#overlay").fadeIn(300);
             const options = {
                 method,
                 headers: {
@@ -23,6 +24,8 @@ $(function () {
             toastr.error(translations.error_occurred)
             console.error('API Error:', error);
             return null;
+        } finally {
+            $("#overlay").fadeOut(300);
         }
     };
 
