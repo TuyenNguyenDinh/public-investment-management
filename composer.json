@@ -18,8 +18,7 @@
         "maatwebsite/excel": "^3.1",
         "mews/captcha": "^3.4",
         "spatie/laravel-permission": "^6.9",
-        "stichoza/google-translate-php": "^5.2",
-        "yajra/laravel-datatables": "^11.0"
+        "stichoza/google-translate-php": "^5.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
