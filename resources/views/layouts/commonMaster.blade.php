@@ -36,6 +36,9 @@ $contentLayout = (isset($container) ? (($container === 'container-xxl') ? "layou
 </head>
 
 <body>
+  <!--  Loading spinner -->
+  @include('customs/common/loading')
+  <!--/  Loading spinner -->
 
   <!-- Layout Content -->
   @yield('layoutContent')
