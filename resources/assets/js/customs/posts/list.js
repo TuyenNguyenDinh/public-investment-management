@@ -3,6 +3,7 @@
 import {CONST, CSRF_TOKEN, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
 
 $(async function () {
+    $("#overlay").fadeIn(300);
     const nodeTree = $('#jstree-ajax');
     const btnSearch = $('button[name="submitButton"]');
     const postsCopy = []
@@ -199,10 +200,12 @@ $(async function () {
 
     nodeTree.on('select_node.jstree', async function (e, data) {
         const id = data.node.id
+        $("#overlay").fadeIn(300);
         resultPosts = await fetchPosts({
             'category_id': id
         })
         reDrawDataTable(resultPosts)
+        $("#overlay").fadeOut(300);
     });
 
     const validateDataInputEndDate = () => {
@@ -229,25 +232,24 @@ $(async function () {
     })
 
     btnSearch.on('click', async function () {
+        $("#overlay").fadeIn(300);
         const params = {
             'organization_id': selectOrganization.val(),
             'start_date': inputStartDate.val(),
             'end_date': inputEndDate.val(),
             'status': selectStatus.val(),
         }
-
         await Promise.all([
             fetchPosts(params),
             fetchCategories({'organization_id': selectOrganization.val()})
         ]).then(response => {
             resultPosts = response[0]
             treeData = response[1]
-
         })
 
         await loadTree().then(() => console.log('Loaded tree'));
-
         reDrawDataTable(resultPosts)
+        $("#overlay").fadeOut(300);
     })
 
     if (dt_basic_table.length) {
@@ -725,7 +727,7 @@ $(async function () {
     initSelect2('.status', translations.select_status_post)
 
     initSelect2('.organization-post', translations.please_select_post)
-
+    $("#overlay").fadeOut(300);
     setTimeout(() => {
         $('.dataTables_filter .form-control').removeClass('form-control-sm');
         $('.dataTables_length .form-select').removeClass('form-select-sm');

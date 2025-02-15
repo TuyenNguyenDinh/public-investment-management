@@ -35,16 +35,17 @@ const loadSelectParentOrganizationTraverse = async (treeData, prefix = '-') => {
     })
 }
 
-const showCategoryDetail = () => {
+const showCategoryDetail = async () => {
     let formDetail = $('.card-detail-category');
-    nodeTree.on('select_node.jstree', function (e, data) {
+    nodeTree.on('select_node.jstree', async function (e, data) {
+        $("#overlay").fadeIn(300);
         let nodeId = data.node.id;
         let api = `/api/v1/categories/${nodeId}`;
-        fetch(api, {
+        await fetch(api, {
             method: 'GET',
         })
             .then(response => response.json())
-            .then(data => {
+            .then(async (data) => {
                 $(formDetail).find('input#name').val(data.text)
                 if (data.text !== null) {
                     let selectParent = $(formDetail).find('select.update-category-parent');
@@ -60,6 +61,8 @@ const showCategoryDetail = () => {
             .catch(error => {
                 toastr.error(translations.server_error);
                 console.error('Error:', error);
+            }).finally(() => {
+                $("#overlay").fadeOut(300);
             });
     })
 }
@@ -74,11 +77,13 @@ const initSelect2 = (selector, placeholder, hasParent = false) => {
 
 
 const initialize = async () => {
+    $("#overlay").fadeIn(300);
     const treeData = await fetchCategories(true);
 
-    showCategoryDetail();
-    await loadTree(treeData)
-    await loadSelectParentOrganizationTraverse(treeData)
+    await showCategoryDetail();
+    await loadTree(treeData);
+    await loadSelectParentOrganizationTraverse(treeData);
+    $("#overlay").fadeOut(300);
 };
 
 $(function () {
