@@ -3,7 +3,13 @@
  */
 'use strict';
 
-import {CSRF_TOKEN, fetchApi, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
+import {
+    apiRequest,
+    CSRF_TOKEN,
+    fetchCallbackData,
+    getDataTableLanguage,
+    translationNoResultSelect2
+} from "../../config.js";
 
 const nodeTree = $('#jstree-menu');
 const nodeTreeUpdate = $('#jstree-menu-update');
@@ -20,7 +26,7 @@ const initSelect2 = (selector, placeholder) => {
 };
 
 // Initialize Select2 elements
-const initializeSelect2Elements = () => {
+const initializeSelect2Elements = async () => {
     const selectRoles = [
         {selector: '.createRole', placeholder: translations.select_role},
         {selector: '.updateRole', placeholder: translations.select_role},
@@ -36,16 +42,18 @@ const initializeSelect2Elements = () => {
     initSelect2('.reAssignMenu', translations.select_menu);
 };
 
-// Initialize DataTable
-const initializeDataTable = () => {
-    const dt_user_table = $('.datatables-users');
+const fetchUserApi = async () => {
+    const res = await apiRequest('/api/v1/users');
+    return res && res.status === 200 ? res.data : null;
+}
 
-    if (dt_user_table.length) {
+// Initialize DataTable
+const initializeDataTable = async () => {
+    const dt_user_table = $('.datatables-users');
+    const userData = await fetchUserApi();
+    if (userData) {
         const dt_user = dt_user_table.DataTable({
-            ajax: {
-                url: '/api/v1/users',
-                error: handleAjaxError,
-            },
+            data: userData,
             columns: getDataTableColumns(),
             columnDefs: getColumnDefinitions(),
             order: [[2, 'desc']],
@@ -232,7 +240,7 @@ const setupEventHandlers = () => {
 // Handle Edit User Click
 const handleEditUser = async function () {
     const id = $(this).data('id');
-    await fetchApi(async () => await loadUserData(id));
+    await fetchCallbackData(async () => await loadUserData(id));
 };
 
 // Handle Delete User Click
@@ -454,9 +462,10 @@ const loadRoleByOrganizationIds = async (organizationIds, isUpdate = false) => {
 }
 
 // Document Ready Function
-$(function () {
-    initializeSelect2Elements();
-    initializeDataTable();
+$(async function () {
+    $('#overlay').fadeIn(300);
+    await initializeSelect2Elements();
+    await initializeDataTable();
 
     $('.createOrganizations').on('select2:select', function () {
         // Your code here
@@ -470,6 +479,7 @@ $(function () {
         loadRoleByOrganizationIds(selectedIds, true).then(() => console.log('Loaded roles'));
     });
 
-    loadTree(nodeTree, window.menuData).then(() => console.log('Loaded tree'));
-    loadTree(nodeTreeUpdate, window.menuData).then(() => console.log('Loaded update tree'));
+    await loadTree(nodeTree, window.menuData).then(() => console.log('Loaded tree'));
+    await loadTree(nodeTreeUpdate, window.menuData).then(() => console.log('Loaded update tree'));
+    $('#overlay').fadeOut(300);
 })

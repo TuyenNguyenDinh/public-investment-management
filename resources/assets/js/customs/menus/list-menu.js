@@ -1,33 +1,11 @@
 'use strict';
 
-import {CSRF_TOKEN, translationNoResultSelect2} from "../../config.js";
+import {apiRequest, translationNoResultSelect2} from "../../config.js";
 
 $(function () {
     const nodeTree = $('#jstree-ajax');
     const ALLOW_DELETE = 1;
     const DENY_DELETE = 0;
-
-    const apiRequest = async (url, method = 'GET', body = null) => {
-        try {
-            $("#overlay").fadeIn(300);
-            const options = {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': CSRF_TOKEN,
-                }
-            };
-            if (body) options.body = JSON.stringify(body);
-            const response = await fetch(url, options);
-            return await response.json();
-        } catch (error) {
-            toastr.error(translations.error_occurred)
-            console.error('API Error:', error);
-            return null;
-        } finally {
-            $("#overlay").fadeOut(300);
-        }
-    };
 
     const fetchMenuApi = async () => {
         const data = await apiRequest('/api/v1/menus');

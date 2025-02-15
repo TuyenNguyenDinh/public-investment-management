@@ -143,15 +143,37 @@ setTimeout(() => {
     $('.dataTables_length .form-select').removeClass('form-select-sm');
 }, 300);
 
-export const fetchApi = async (callback) => {
+export const fetchCallbackData = async (callback) => {
     try {
         $("#overlay").fadeIn(300);
         await callback();
     } catch (error) {
-        toastr.error(translations.error_call_api);
+        toastr.error(translations.error_occurred);
         console.log('Error: ', error);
     } finally {
         $("#overlay").fadeOut(300);
     }
 }
+
+export const apiRequest = async (url, method = 'GET', body = null) => {
+    try {
+        $("#overlay").fadeIn(300);
+        const options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': CSRF_TOKEN,
+            }
+        };
+        if (body) options.body = JSON.stringify(body);
+        const response = await fetch(url, options);
+        return await response.json();
+    } catch (error) {
+        toastr.error(translations.error_occurred)
+        console.error('API Error:', error);
+        return false;
+    } finally {
+        $("#overlay").fadeOut(300);
+    }
+};
 
