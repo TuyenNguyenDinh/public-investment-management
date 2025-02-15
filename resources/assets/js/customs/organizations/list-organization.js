@@ -55,16 +55,17 @@ const fetchOrganizationApi = async () => {
     }
 }
 
-const showOrganizationDetail = () => {
+const showOrganizationDetail = async () => {
     let formDetail = $('.card-detail-organization');
-    nodeTree.on('select_node.jstree', function (e, data) {
+    nodeTree.on('select_node.jstree', async function (e, data) {
         let nodeId = data.node.id;
         let api = `/api/v1/organizations/${nodeId}`;
-        fetch(api, {
+        $("#overlay").fadeIn(300);
+        await fetch(api, {
             method: 'GET',
         })
             .then(response => response.json())
-            .then(data => {
+            .then(async (data) => {
                 $(formDetail).find('input#name').val(data.data.text)
                 $(formDetail).find('textarea#description').val(data.data.description)
                 $(formDetail).find('input#phone-number').val(data.data.phone_number)
@@ -79,9 +80,11 @@ const showOrganizationDetail = () => {
                 formDetail.removeClass('invisible')
                 formDetail.addClass('visible')
             })
-            .catch(error => {
+            .catch(() => {
                 toastr.error(translations.organization_update + ' ' + translations.organization_delete);
-            });
+            }).finally(() => {
+                $("#overlay").fadeOut(300);
+            })
     })
 }
 
@@ -96,6 +99,7 @@ const initSelect2 = (selector) => {
 
 
 const initialize = async () => {
+    $("#overlay").fadeIn(300);
     const treeData = await fetchOrganizationApi();
 
     showOrganizationDetail();
@@ -105,6 +109,7 @@ const initialize = async () => {
     await loadTree(treeData);
 
     await loadSelectParentOrganizationTraverse(treeData);
+    $("#overlay").fadeOut(300);
 };
 
 $(function () {
