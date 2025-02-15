@@ -1,20 +1,20 @@
 'use strict';
 
-import {getDataTableLanguage} from "../../config.js";
+import {apiRequest, getDataTableLanguage} from "../../config.js";
 
-$(function () {
+const fetchPermissionData = async () => {
+    const res = await apiRequest('/api/v1/permissions');
+    return res && res.status === 200 ? res.data : null
+}
+
+$( async function () {
+    $('#overlay').fadeIn(300);
     let dataTablePermissions = $('.datatables-permissions');
-
+    const permissionData = await fetchPermissionData();
     // Users List datatable
-    if (dataTablePermissions.length) {
+    if (permissionData) {
         dataTablePermissions.DataTable({
-            ajax: {
-                url: '/api/v1/permissions',
-                error: function (jqXHR, textStatus, errorThrown) {
-                    toastr.error(translations.error_fetching_permissions);
-                    console.error('AJAX error:', textStatus, errorThrown);
-                }
-            },
+            data: permissionData,
             columns: [
                 {data: ''},
                 {data: 'id'},
@@ -190,11 +190,7 @@ $(function () {
         });
     });
 
-    // Filter form control to default size
-    // ? setTimeout used for multilingual table initialization
     setTimeout(() => {
-        $('.dataTables_filter .form-control').removeClass('form-control-sm');
-        $('.dataTables_length .form-select').removeClass('form-select-sm');
         $('.dataTables_info').addClass('ms-n1');
         $('.dataTables_paginate').addClass('me-n1');
     }, 300);
@@ -217,5 +213,6 @@ $(function () {
         let name = button.data('name');
         $('.permission-parent-id').val(id);
         $('h4.add-child-permission-title').text(`${translations.add_new_permission_for} ${name}`);
-    })
+    });
+    $('#overlay').fadeOut(300);
 });

@@ -1,19 +1,27 @@
 'use strict';
 
-import {CSRF_TOKEN, fetchApi, getDataTableLanguage, translationNoResultSelect2} from "../../config.js";
+import {
+    apiRequest,
+    CSRF_TOKEN,
+    fetchCallbackData,
+    getDataTableLanguage,
+    translationNoResultSelect2
+} from "../../config.js";
 import $ from "jquery";
 
 // Datatable và các plugin
-$(function () {
+$( async function () {
+    $('#overlay').fadeIn(300);
     initializeSelect2($('.createOrganizations'), translations.select_organization);
     initializeSelect2($('.updateOrganizations'), translations.select_organization);
-    initializeDataTable($('.datatables-roles'));
+    await initializeDataTable($('.datatables-roles'));
     setupCheckAll('#selectAll', '#addRoleForm')
     setupCheckAll('#selectUpdateAll', '#editRoleForm')
     setupCheckAlLLine('.check-all', 'tr');
     setupCheckAlLLine('.check-update-all', 'tr');
     handleDeleteRecord('.datatables-roles tbody', '.delete-record', 'api/v1/roles/');
-    getRoleDetail('#editRoleForm', 'api/v1/roles/', '#editRoleModal');
+    await getRoleDetail('#editRoleForm', 'api/v1/roles/', '#editRoleModal');
+    $('#overlay').fadeOut(300);
 });
 
 // Khởi tạo select2 cho các input tổ chức
@@ -27,14 +35,17 @@ function initializeSelect2($element, placeholder) {
     }
 }
 
+const fetchRoleData = async () => {
+    const res = await apiRequest('/api/v1/roles');
+    return res && res.status === 200 ? res.data : null;
+}
+
 // Khởi tạo DataTable
-function initializeDataTable($table) {
-    if ($table.length) {
-        $table.DataTable({
-            ajax: {
-                url: '/api/v1/roles',
-                error: handleAjaxError
-            },
+const initializeDataTable = async (table) => {
+    const roleData = await fetchRoleData();
+    if (roleData) {
+        table.DataTable({
+            data: roleData,
             columns: [
                 {data: ''}, {data: 'id'}, {data: 'name'}, {data: 'created_at'}, {data: ''}
             ],
@@ -151,7 +162,7 @@ const getRoleDetail = async (formSelector, apiUrl, modalSelector) => {
     $(document).on('click', '.edit-role', function () {
         let id = $(this).data('id');
         const form = $(formSelector);
-        fetchApi(async () => await fetchRoleData(apiUrl, id, form, modalSelector));
+        fetchCallbackData(async () => await fetchRoleDetail(apiUrl, id, form, modalSelector));
     });
 }
 
@@ -162,7 +173,7 @@ function handleAjaxError(jqXHR, textStatus, errorThrown) {
 }
 
 // Fetch dữ liệu vai trò
-const fetchRoleData = async (apiUrl, id, form, modalSelector) => {
+const fetchRoleDetail = async (apiUrl, id, form, modalSelector) => {
     await fetch(`${baseUrl}${apiUrl}${id}`, {
         method: 'GET',
         headers: {
