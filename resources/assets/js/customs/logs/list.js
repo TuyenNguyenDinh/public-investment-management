@@ -1,13 +1,19 @@
 'use strict';
 
-import {getDataTableLanguage} from "../../config.js";
+import {apiRequest, getDataTableLanguage} from "../../config.js";
 
-$(function () {
+const fetchLogData = async () => {
+    const res = await apiRequest('/api/v1/logs');
+    return res && res.status === 200 ? res.data : null;
+}
+
+$(async function () {
     let dt_activity_table = $('.datatables-activity');
+    const logData = await fetchLogData();
 
-    if (dt_activity_table.length) {
+    if (logData) {
         dt_activity_table.DataTable({
-            ajax: '/api/v1/logs',
+            data: logData,
             columns: [
                 {data: 'user_name'},
                 {data: 'organization_name'},
