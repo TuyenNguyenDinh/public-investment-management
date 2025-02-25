@@ -3,8 +3,10 @@
 namespace App\Helpers;
 
 use App\Models\Notification;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class Helpers
 {
@@ -267,5 +269,31 @@ class Helpers
             'created_at' => now(),
             'updated_at' => now(),
         ];
+    }
+    
+    /**
+     * Write a value to Redis cache for a given number of minutes.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param int|null $minutes
+     *
+     * @return void
+     */
+    public static function writeCache(string $key, mixed $value, ?int $minutes = 60): void {
+        Cache::store('redis')->put($key, $value, now()->addMinutes($minutes));
+    }
+
+
+    /**
+     * Read a value from Redis cache.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
+    public static function readCache(string $key): mixed {
+        return Cache::store('redis')->get($key);
     }
 }
