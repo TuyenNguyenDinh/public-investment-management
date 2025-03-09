@@ -111,7 +111,7 @@
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-                @if($user->hasOrganizationPermission(BaseEnum::CONFIG['UPDATE'], session('organization_id')))
+                @if($user->checkHasOrganizationPermission(BaseEnum::CONFIG['UPDATE'], session('organization_id')))
                     <button type="submit" class="btn btn-primary">{{ __('save_configurations') }}</button>
                 @endif
             </form>

@@ -32,7 +32,7 @@ Route::middleware(['auth:web', config('jetstream.auth_session'), 'verified'])->g
     // Choose organization authentication
     Route::get('/choose-organization', [AuthController::class, 'chooseOrganization'])->name('choose-organization-view');
     // Logout
-    Route::middleware('log_activity')->group(function () {
+    Route::middleware(['log_activity', 'autoload_user_session_permission'])->group(function () {
         Route::get('/lang/{locale}', [LanguageController::class, 'change'])->name('lang.change');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

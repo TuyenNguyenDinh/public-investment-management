@@ -45,7 +45,7 @@
                         <h5 class="m-0">{{__('Categories')}}</h5>
                     </div>
                     <div class="col-6 bdt-buttons btn-group flex-wrap w-25">
-                        @if($user->hasOrganizationPermission(BaseEnum::CATEGORY['CREATE'], session('organization_id')))
+                        @if($user->checkHasOrganizationPermission(BaseEnum::CATEGORY['CREATE']))
                         <button
                             class="btn btn-secondary btn-primary waves-effect waves-light rounded border-left-0 border-right-0"
                             data-bs-toggle="offcanvas"

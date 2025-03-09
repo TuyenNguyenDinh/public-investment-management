@@ -44,7 +44,7 @@
             Delete: false,
         }
         @foreach(BaseEnum::ROLE_ACTION as $role)
-            @if($user->hasOrganizationPermission("$role Roles", session('organization_id')))
+            @if($user->checkHasOrganizationPermission("$role Roles"))
             window.rolePermission['{{$role}}'] = true
         @endif
         @endforeach

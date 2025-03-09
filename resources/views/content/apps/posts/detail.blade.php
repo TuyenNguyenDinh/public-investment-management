@@ -90,7 +90,7 @@
                                 <img width="{{$configs['thumbnail_post_width_size'] ?? '40'}}" height="{{$configs['thumbnail_post_height_size'] ?? '40'}}" src="{{ $post->thumbnail }}" alt="Post thumbnail">
                             </div>
                         @endisset
-                        @if($user->hasOrganizationPermission(BaseEnum::POST['REVIEW'], session('organization_id')))
+                        @if($user->checkHasOrganizationPermission(BaseEnum::POST['REVIEW']))
                             <div class="col-md-12">
                                 <label class="form-label" for="status">{{__('status')}}</label>
                                 <select id="status" class="status form-select @error('status') is-invalid @enderror" name="status">

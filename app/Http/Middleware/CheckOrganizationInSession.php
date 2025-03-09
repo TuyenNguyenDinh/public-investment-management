@@ -16,6 +16,9 @@ class CheckOrganizationInSession
      */
     public function handle(Request $request, Closure $next)
     {
+        if (!session()->has('autoload_permissions')) {
+            session()->put('autoload_permissions', false);
+        }
         if (!session()->has('organization_id')) {
             Auth::logout();
             session()->flush();

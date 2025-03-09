@@ -36,7 +36,7 @@
             Delete: false,
         }
         @foreach(BaseEnum::ROLE_ACTION as $role)
-            @if($user->hasOrganizationPermission("$role Menus", session('organization_id')))
+            @if($user->checkHasOrganizationPermission("$role Menus"))
             window.menuPermission['{{$role}}'] = true
         @endif
         @endforeach
@@ -56,7 +56,7 @@
                         <h5 class="m-0">{{ __('menu_title') }}</h5>
                     </div>
                     <div class="col-6 bdt-buttons btn-group flex-wrap w-25">
-                        @if($user->hasOrganizationPermission(BaseEnum::MENUS['CREATE'], session('organization_id')))
+                        @if($user->checkHasOrganizationPermission(BaseEnum::MENUS['CREATE']))
                             <button
                                 class="btn btn-secondary btn-primary waves-effect waves-light rounded border-left-0 border-right-0"
                                 data-bs-toggle="offcanvas"

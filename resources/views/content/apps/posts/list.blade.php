@@ -52,7 +52,7 @@
         window.hasAdmin = false;
         @if($user->hasRole('Admin')) window.hasAdmin = true;@endif
         @foreach(BaseEnum::ROLE_ACTION as $role)
-            @if($user->hasOrganizationPermission("$role Posts", session('organization_id')))
+            @if($user->checkHasOrganizationPermission("$role Posts"))
             window.postPermission['{{$role}}'] = true
         @endif
         @endforeach
@@ -164,7 +164,7 @@
                     <div class="col-3">
                         <h5 class="m-0">{{ __('search_post') }}</h5>
                     </div>
-                    @if($user->hasOrganizationPermission(BaseEnum::POST['EXPORT'], session('organization_id')))
+                    @if($user->checkHasOrganizationPermission(BaseEnum::POST['EXPORT']))
                         <div class="col-3 bdt-buttons btn-group flex-wrap w-25">
                             <form style="width: 100%" action="{{ route('app-posts-export-excel') }}" method="post"
                                   enctype="multipart/form-data">
@@ -181,7 +181,7 @@
                             </form>
                         </div>
                     @endif
-                    @if($user->hasOrganizationPermission(BaseEnum::POST['IMPORT'], session('organization_id')))
+                    @if($user->checkHasOrganizationPermission(BaseEnum::POST['IMPORT']))
                         <div class="col-3 bdt-buttons btn-group flex-wrap w-25">
                             <button
                                 class="btn btn-secondary btn-primary waves-effect waves-light rounded border-left-0 border-right-0"
@@ -226,7 +226,7 @@
                         </div>
                     @endif
                     <div class="col-3 bdt-buttons btn-group flex-wrap w-25">
-                        @if($user->hasOrganizationPermission(BaseEnum::POST['CREATE'], session('organization_id')))
+                        @if($user->checkHasOrganizationPermission(BaseEnum::POST['CREATE']))
                             <a
                                 href="{{ route('app-posts-create') }}"
                                 class="btn btn-secondary btn-primary waves-effect waves-light rounded border-left-0 border-right-0"

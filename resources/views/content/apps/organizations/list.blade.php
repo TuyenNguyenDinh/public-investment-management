@@ -39,7 +39,7 @@
             Delete: false,
         }
         @foreach(BaseEnum::ROLE_ACTION as $role)
-            @if($user->hasOrganizationPermission("$role Organizations", session('organization_id')))
+            @if($user->checkHasOrganizationPermission("$role Organizations"))
             window.organizationPermission['{{$role}}'] = true
         @endif
         @endforeach
@@ -61,7 +61,7 @@
                         <h5 class="m-0">{{ __('organizations') }}</h5>
                     </div>
                     <div class="col-6 bdt-buttons btn-group flex-wrap w-25">
-                        @if($user->hasOrganizationPermission(BaseEnum::ORGANIZATIONS['CREATE'], session('organization_id')))
+                        @if($user->checkHasOrganizationPermission(BaseEnum::ORGANIZATIONS['CREATE']))
                             <button
                                 class="btn btn-secondary btn-primary waves-effect waves-light rounded border-left-0 border-right-0"
                                 data-bs-toggle="offcanvas"

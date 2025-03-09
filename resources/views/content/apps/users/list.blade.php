@@ -50,8 +50,8 @@
         window.menuData = @json($menus);
         @if($user->hasRole('Admin')) window.hasAdmin = true;
         @endif
-            @foreach(BaseEnum::ROLE_ACTION as $role)
-            @if($user->hasOrganizationPermission("$role Users", session('organization_id')))
+        @foreach(BaseEnum::ROLE_ACTION as $role)
+            @if($user->checkHasOrganizationPermission("$role Users"))
             window.userPermission['{{$role}}'] = true
         @endif
         @endforeach

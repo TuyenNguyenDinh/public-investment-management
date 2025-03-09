@@ -29,10 +29,10 @@
             <label class="form-label" for="tax-code">{{ __('organization_tax_code') }}</label>
             <input type="text" class="form-control" id="tax-code" placeholder="{{ __('organization_tax_code_placeholder') }}" name="tax_code" aria-label="tax_code"/>
         </div>
-        @if($user->hasOrganizationPermission(BaseEnum::ORGANIZATIONS['UPDATE'], session('organization_id')))
+        @if($user->checkHasOrganizationPermission(BaseEnum::ORGANIZATIONS['UPDATE']))
             <button type="submit" id="submitEditOrganization" class="btn btn-primary me-3 data-submit">{{ __('organization_update') }}</button>
         @endif
-        @if($user->hasOrganizationPermission(BaseEnum::ORGANIZATIONS['DELETE'], session('organization_id')))
+        @if($user->checkHasOrganizationPermission(BaseEnum::ORGANIZATIONS['DELETE']))
             <button type="button" id="deleteOrganization" class="btn btn-label-danger">{{ __('organization_delete') }}</button>
         @endif
     </form>

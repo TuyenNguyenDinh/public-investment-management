@@ -31,10 +31,10 @@
             <label class="form-label" for="url">{{ __('menu_url') }}</label>
             <input type="text" class="form-control" id="url" placeholder="{{ __('menu_url_placeholder') }}" name="url" aria-label="url"/>
         </div>
-        @if($user->hasOrganizationPermission(BaseEnum::MENUS['UPDATE'], session('organization_id')))
+        @if($user->checkHasOrganizationPermission(BaseEnum::MENUS['UPDATE']))
             <button type="submit" id="submitEditMenu" class="btn btn-primary me-3 data-submit">{{ __('menu_update') }}</button>
         @endif
-        @if($user->hasOrganizationPermission(BaseEnum::MENUS['DELETE'], session('organization_id')))
+        @if($user->checkHasOrganizationPermission(BaseEnum::MENUS['DELETE']))
             <button type="button" id="deleteMenu" class="btn btn-label-danger">{{ __('menu_delete') }}</button>
         @endif
     </form>
