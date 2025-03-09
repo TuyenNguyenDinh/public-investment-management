@@ -29,11 +29,11 @@
                 @endforelse
             </select>
         </div>
-        @if($user->hasOrganizationPermission(BaseEnum::CATEGORY['UPDATE'], session('organization_id')))
+        @if($user->checkHasOrganizationPermission(BaseEnum::CATEGORY['UPDATE']))
             <button type="submit" id="submitEditOrganization"
                     class="btn btn-primary me-3 data-submit">{{__('update')}}</button>
         @endif
-        @if($user->hasOrganizationPermission(BaseEnum::CATEGORY['DELETE'], session('organization_id')))
+        @if($user->checkHasOrganizationPermission(BaseEnum::CATEGORY['DELETE']))
             <button type="button" id="deleteOrganization" class="btn btn-label-danger">{{__('delete')}}</button>
         @endif
     </form>

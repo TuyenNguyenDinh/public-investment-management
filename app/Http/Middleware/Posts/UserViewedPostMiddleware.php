@@ -9,6 +9,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserViewedPostMiddleware
@@ -27,7 +28,6 @@ class UserViewedPostMiddleware
         if (Auth::check()) {
             $userId = $request->user()->id;
         }
-
         $isViewed = LogUserViewedPost::where('user_id', $userId)->where('post_id', $postId)->first();
         if ($isViewed) {
             return $next($request);

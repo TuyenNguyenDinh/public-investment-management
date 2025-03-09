@@ -6,6 +6,7 @@ use App\Enums\BaseEnum;
 use App\Enums\Posts\PostType;
 use App\Models\Scopes\CheckOrganizationScope;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class Post extends Model
 {
@@ -78,6 +80,9 @@ class Post extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function scopeFilterPost(Builder $query): void
     {
         $user = auth()->user();
@@ -85,7 +90,7 @@ class Post extends Model
         $query
             ->when($this->userHasPermissions($user, $organizationId)
                 && !$user->hasRole('Admin'), function (Builder $q) use ($user, $organizationId) {
-                $q->when(!$user->hasOrganizationPermission(BaseEnum::POST['REVIEW'], $organizationId), function (Builder $q) use ($user) {
+                $q->when(!$user->checkHasOrganizationPermission(BaseEnum::POST['REVIEW']), function (Builder $q) use ($user) {
                     $q->whereIn('status', [PostType::APPROVED, PostType::LOCKED])->orWhere('created_by', $user->id);
                 });
             })->when(!$this->userHasPermissions($user, $organizationId), function (Builder $q) {
@@ -97,14 +102,15 @@ class Post extends Model
     /**
      * Check if user has required permissions
      *
-     * @param $user
+     * @param Authenticatable|User $user
      * @param int|null $organizationId
      * @return bool
+     * @throws InvalidArgumentException
      */
-    private function userHasPermissions($user, ?int $organizationId): bool
+    private function userHasPermissions(Authenticatable|User $user, ?int $organizationId): bool
     {
-        return $user->hasOrganizationPermission(BaseEnum::POST['CREATE'], $organizationId) ||
-            $user->hasOrganizationPermission(BaseEnum::POST['UPDATE'], $organizationId) ||
-            $user->hasOrganizationPermission(BaseEnum::POST['REVIEW'], $organizationId);
+        return $user->checkHasOrganizationPermission(BaseEnum::POST['CREATE']) ||
+            $user->checkHasOrganizationPermission(BaseEnum::POST['UPDATE']) ||
+            $user->checkHasOrganizationPermission(BaseEnum::POST['REVIEW']);
     }
 }

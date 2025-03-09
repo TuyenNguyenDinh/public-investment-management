@@ -105,7 +105,9 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
 
-//    'cache_key_list' => [
-//        'roles' => 
-//    ]
+    'cache_key_list' => [
+        'user_permission_list' => 'load_cache_permissions_%s_%s',
+        'user_organization_ids' => 'organization_ids_user_%s_%s',
+        'user_current_organization' => 'current_organization_user_%s_%s',
+    ]
 ];

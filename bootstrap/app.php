@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AutoloadUserSessionPermissionByOrganizationMiddleware;
 use App\Http\Middleware\CheckOrganizationPermission;
 use App\Http\Middleware\LocaleMiddleware;
 use App\Http\Middleware\Loggers\LogActivityMiddleware;
@@ -27,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
          'log_activity' => LogActivityMiddleware::class,
          'permission' => CheckOrganizationPermission::class,
          'user_viewed_post' => UserViewedPostMiddleware::class,
+         'autoload_user_session_permission' => AutoloadUserSessionPermissionByOrganizationMiddleware::class
       ]);
       $middleware->validateCsrfTokens([
         'ckfinder/*'

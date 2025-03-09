@@ -143,18 +143,4 @@ class GetPostsApiService
         $query->when($organizationId, fn(Builder $q) => $q->where('organization_id', $organizationId))
             ->when(!$organizationId, fn(Builder $q) => $q->whereIn('organization_id', $organizationIds));
     }
-
-    /**
-     * Check if user has required permissions
-     *
-     * @param $user
-     * @param int|null $organizationId
-     * @return bool
-     */
-    private function userHasPermissions($user, ?int $organizationId): bool
-    {
-        return $user->hasOrganizationPermission(BaseEnum::POST['CREATE'], $organizationId) ||
-            $user->hasOrganizationPermission(BaseEnum::POST['UPDATE'], $organizationId) ||
-            $user->hasOrganizationPermission(BaseEnum::POST['REVIEW'], $organizationId);
-    }
 }

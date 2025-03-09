@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helpers;
 use App\Traits\CheckOrganizationPermissionTrait;
 use App\Traits\MediaTrait;
 use App\Traits\SetDateTimeConfigTrait;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Psr\SimpleCache\InvalidArgumentException;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -122,15 +124,28 @@ class User extends Authenticatable
 
     /**
      * @return Attribute
+     * @throws InvalidArgumentException
      */
     protected function currentOrganization(): Attribute
     {
-        $organization = OrganizationUnit::query()
-            ->withoutGlobalScopes()
-            ->find(session('organization_id'));
+        $cacheKey = sprintf(config('cache.cache_key_list.user_current_organization'),
+            session('organization_id'),
+            auth('web')->id()
+        );
+        $cacheCurrentOrganization = Helpers::readCache($cacheKey);
+        
+        if (!$cacheCurrentOrganization) {
+            $cacheCurrentOrganization = OrganizationUnit::query()
+                ->withoutGlobalScopes()
+                ->select('id', 'name')
+                ->find(session('organization_id'));
+            Helpers::writeCache($cacheKey, $cacheCurrentOrganization);
+        }
 
         return Attribute::make(
-            get: fn () => $organization ? switchFieldByLang($organization->name, $organization->name_en) : null
+            get: fn () => $cacheCurrentOrganization
+                ? switchFieldByLang($cacheCurrentOrganization->name, $cacheCurrentOrganization->name_en)
+                : null
         );
     }
 
