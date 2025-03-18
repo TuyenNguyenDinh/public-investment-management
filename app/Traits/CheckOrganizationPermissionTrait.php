@@ -29,4 +29,23 @@ trait CheckOrganizationPermissionTrait
 
         return in_array($permission, $permissionCache);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAllOrganizationTrees(): mixed
+    {
+        // Lấy danh sách ID của tất cả các tổ chức mà user này thuộc về
+        $organizationIds = $this->organizations()->withoutGlobalScopes()->pluck('organization_units.id');
+
+        // Lấy chính nó và tất cả con cháu của từng tổ chức trong danh sách
+        return OrganizationUnit::query()->withoutGlobalScopes()
+            ->whereIn('id', $organizationIds)
+            ->orWhereHas('ancestors', function ($query) use ($organizationIds) {
+                $query->whereIn('id', $organizationIds);
+            })
+            ->get()
+            ->toTree();
+    }
+
 }
